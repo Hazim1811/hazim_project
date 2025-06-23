@@ -1,0 +1,3 @@
+ngrok http --domain=primary-balanced-roughy.ngrok-free.app 8000
+
+python manage.py runserver 8000

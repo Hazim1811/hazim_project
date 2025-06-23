@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Hospital Dashboard{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-top: 60px;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            flex-wrap: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .navbar h1 {
+            flex-shrink: 0;
+            margin: 0;
+            font-size: 20px;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 1;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color:#ffffff; /* black table background */
+            color: #000000; /* white text */
+        }
+
+        table, th, td {
+            border: 1px solid #ccc; /* lighter border for neatness */
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f0f4f8; /* slightly lighter black for header */
+            color: #000000;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* slightly lighter black for even rows */
+        }
+
+        tr:hover {
+            background-color: #e6f7ff; /* light blue on hover for nice UX */
+        }
+        
+        h2 {
+            color: #111111;
+        }
+
+        .username-text {
+            display: inline-block;
+            max-width: 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <h1>Hospital Parit Jawa</h1>
+    <div class="nav-links">
+        {% if request.user.is_authenticated %}
+        <span class="username-text" title="Welcome, {{ request.user.username }}">
+            Welcome, <b>{{ request.user.username }}</b>
+        </span>        
+            {% if request.user.role == 'doctor' %}
+                <a href="{% url 'doctor_dashboard' %}">Doctor Dashboard</a>
+            {% elif request.user.role == 'nurse' %}
+                <a href="{% url 'nurse_dashboard' %}">Nurse Dashboard</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

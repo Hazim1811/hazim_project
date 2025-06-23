@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Update Patient{% endblock %}
+{% block content %}
+<h2>Update Patient</h2>
+
+<form method="post" style="max-width: 600px; margin: auto;">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 15px;">
+        <label for="name"><strong>Name:</strong></label>
+        <input type="text" id="name" name="name" value="{{ patient.name }}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="patient_id"><strong>Patient ID:</strong></label>
+        <input type="text" id="patient_id" name="patient_id" value="{{ patient.patient_id }}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="email"><strong>Email:</strong></label>
+        <input type="email" id="email" name="email" value="{{ patient.email }}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="phone_number"><strong>Phone Number:</strong></label>
+        <input type="text" id="phone_number" name="phone_number" value="{{ patient.phone_number }}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+        <label for="medical_condition"><strong>Medical Condition:</strong></label>
+        <input type="text" id="medical_condition" name="medical_condition" value="{{ patient.medical_condition }}" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+    </div>
+
+    <div style="margin-bottom: 20px;">
+        <label for="gender"><strong>Gender:</strong></label>
+        <select id="gender" name="gender" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px;">
+            <option value="Male" {% if patient.gender == "Male" %}selected{% endif %}>Male</option>
+            <option value="Female" {% if patient.gender == "Female" %}selected{% endif %}>Female</option>
+        </select>
+    </div>
+
+    <button type="submit" style="width: 100%; padding: 10px; background-color: #0066ff; color: white; font-weight: bold; font-size: 15; border: none; border-radius: 6px; cursor: pointer;">
+        Update Patient
+    </button>
+</form>
+
+<div style="max-width: 600px; margin: 20px auto; text-align: center;">
+    <a href="{% url 'doctor_dashboard' %}" style="display: inline-block; padding: 10px 20px; background-color: #ccc; color: black; border-radius: 6px; text-decoration: none; font-weight: bold;">
+        ← Back to Dashboard
+    </a>
+</div>
+
+{% endblock %}

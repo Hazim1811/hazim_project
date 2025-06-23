@@ -1,0 +1,10 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+  <div style="margin-bottom:20px;">
+    <a href="{% url 'register' %}" class="button btn-primary" style="background:#3c8dbc;padding:10px;color:white;text-decoration:none;border-radius:5px;">
+      ➕ Register New User
+    </a>
+  </div>
+  {{ block.super }}
+{% endblock %}

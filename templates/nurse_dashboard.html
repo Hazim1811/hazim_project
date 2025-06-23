@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Nurse Dashboard{% endblock %}
+{% block content %}
+<h2>Nurse Dashboard</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Patient ID</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Medical Condition</th>
+            <th>Gender</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for patient in patients %}
+        <tr>
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.patient_id }}</td>
+            <td>{{ patient.email }}</td>
+            <td>{{ patient.phone_number }}</td>
+            <td>{{ patient.medical_condition }}</td>
+            <td>{{ patient.gender }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

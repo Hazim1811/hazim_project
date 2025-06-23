@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #a5bcf3);
+        }
+
+        .hospital-info {
+            text-align: center;
+            color: black;
+            margin-top: 20px;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-form,
+        .qr-box {
+            width: 300px;
+        }
+
+        .login-form h2,
+        .qr-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .button-wrapper {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            width: 180px;
+            padding: 8px;
+            background: linear-gradient(to right, #00aaff, #0066ff);
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #0099e6, #0055cc);
+        }
+
+        .qr-box {
+            text-align: center;
+        }
+
+        .qr-box img {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            background-color: #f9f9f9;
+        }
+
+        /* —— refined error banner styling —— */
+        .login-form .error-banner {
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #f8d7da;
+            border: 1px solid #f5c2c7;
+            color: #721c24;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .login-form .error-banner strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .login-form .error-banner p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hospital-info">
+        <h2><b>Hospital Parit Jawa</b></h2>
+        <h2>Database System</h2>
+        <p>Have a good day!</p>
+    </div>
+
+    <div class="main-container">
+        <!-- Left Side: Traditional Login -->
+        <div class="login-form">
+            <h2 style="text-align:left; margin-bottom: 20px;">Sign in with Username</h2>
+
+            {# ← New error banner sits here cleanly #}
+            {% if messages %}
+            <div class="error-banner">
+                <strong>Wrong Credentials</strong>
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+                <div class="button-wrapper">
+                    <button type="submit">Sign In</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Side: QR Login -->
+        <div class="qr-box">
+            <h2 style="color:#000000; font-size: 16px;">OR SIGN IN WITH QR</h2>
+            <div id="qrContainer" style="margin-top: 10px; opacity: 0; transition: opacity 0.5s ease-in-out;">
+                <img id="qrImage" src="" alt="Scan QR Code" width="180"
+                    style="border: 1px solid #ccc; padding: 8px; background: #fff; border-radius: 8px;">
+                <p style="font-size: 13px; color: #444; margin-top: 8px;">Scan this QR code with your mobile app</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const qrImage     = document.getElementById('qrImage');
+            const qrContainer = document.getElementById('qrContainer');
+
+            function refreshQR() {
+                const url = `/qr_code/?t=${Date.now()}`;
+                qrImage.src           = url;
+                qrContainer.style.display = 'block';
+                qrContainer.style.opacity = 1;
+            }
+
+            refreshQR();
+            setInterval(refreshQR, 30000);  // Refresh every 30s
+            pollQRStatus();
+        });
+
+        function pollQRStatus() {
+            fetch("/qr_status/")
+                .then(r => r.json())
+                .then(data => {
+                    if (data.authenticated) {
+                        window.location.href = data.redirect_url;
+                    } else {
+                        setTimeout(pollQRStatus, 2000);
+                    }
+                })
+                .catch(() => setTimeout(pollQRStatus, 4000));
+        }
+    </script>
+</body>
+
+</html>

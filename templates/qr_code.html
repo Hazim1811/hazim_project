@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>QR Code Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+    <h2>Scan QR Code to Authenticate</h2>
+    <div id="reader" width="600px"></div>
+
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log("Decoded QR:", decodedText);
+            const payload = JSON.parse(decodedText);
+            const signedMock = btoa(payload.challenge + "_signed");
+
+            // Send scanned text to backend
+            fetch("/validate_qr/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({ 
+                    username: payload.username,
+                    original_challenge: payload.challenge,
+                    signed_challenge: signedMock})
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    window.location.href = "/dashboard/";
+                }else {
+                    alert("❌ " + data.message);
+                }
+            });
+        }
+
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess);
+    </script>
+</body>
+</html>
