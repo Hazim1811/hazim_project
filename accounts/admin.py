@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import CustomUser, Patient
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
+
+admin.site.unregister(Group)
 
 
 class CustomUserAdmin(UserAdmin):
