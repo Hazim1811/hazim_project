@@ -194,6 +194,16 @@
                 })
                 .catch(() => setTimeout(pollQRStatus, 4000));
         }
+
+                // Auto-hide error message
+        setTimeout(() => {
+            const errorBanner = document.querySelector('.error-banner');
+            if (errorBanner) {
+                errorBanner.style.transition = 'opacity 0.5s ease';
+                errorBanner.style.opacity = 0;
+                setTimeout(() => errorBanner.style.display = 'none', 500);
+            }
+        }, 4000);
     </script>
 </body>
 

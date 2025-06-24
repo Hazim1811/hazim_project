@@ -147,7 +147,6 @@ def login_view(request):
     # GET request
     next_param = request.GET.get('next', '')
     print(f"[DEBUG] GET login form, next={next_param}")
-    messages.warning(request, "Session expired. Please log in again.")
     return render(request, 'login.html', {'next': next_param})
 
 

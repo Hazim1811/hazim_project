@@ -10,3 +10,11 @@
 [FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-24 17:24:31 from IP 127.0.0.1
 [LOGIN SUCCESS] hazimharman (superuser) at 2025-06-24 17:24:43  from IP 127.0.0.1
 [LOGIN SUCCESS] Dr.Khairel (doctor) at 2025-06-24 18:21:21  from IP 127.0.0.1
+[LOGOUT] Dr.Khairel (doctor) logged out at 2025-06-24 18:39:15
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-24 18:41:22
+[FAILED LOGIN] Attempt for 'Ms.Aida' at 2025-06-24 18:48:22 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Ms.Aida' at 2025-06-24 18:49:34 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:50:13 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:51:53 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:52:17 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:53:43 from IP 127.0.0.1
