@@ -16,7 +16,7 @@ def role_required(role):
             if getattr(request.user, 'role', None) != role:
                 return render(
                     request,
-                    'access_denied.html',   # or 'access_denied.html' if that’s where you put it
+                    'access_denied.html',
                     {'required_role': role},
                     status=403
                 )

@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '*', 'primary-balanced-roughy.ngrok-free.app']
 
+CSRF_TRUSTED_ORIGINS = ['https://primary-balanced-roughy.ngrok-free.app',]
 
 # Application definition
 
