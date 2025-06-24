@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from accounts.admin_views import activity_log_view
 
 urlpatterns = [
+    path('admin-tools/activity-log/', activity_log_view, name='activity_log'),
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
 ]

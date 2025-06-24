@@ -20,7 +20,9 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
 
-import base64, os, json, qrcode, secrets, io
+import base64, os, json, qrcode, secrets, io, logging
+
+activity_logger = logging.getLogger('activity')
 
 
 def home_redirect(request):
@@ -119,6 +121,8 @@ def login_view(request):
         if user is not None:
             login(request, user)
             print(f"[DEBUG] Logged in as: {user.username}, Role: {user.role}")
+            role = getattr(user, 'role', 'superuser') or 'superuser'
+            activity_logger.info(f"[LOGIN SUCCESS] {user.username} ({role}) at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}  from IP {get_client_ip(request)}")
 
             if user.must_change_password:
                 return redirect('password_change')
@@ -137,6 +141,7 @@ def login_view(request):
                 return redirect('/')
         
         else:
+            activity_logger.info(f"[FAILED LOGIN] Attempt for '{username}' at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')} from IP {get_client_ip(request)}")
             messages.error(request, "Invalid username or password.")
 
     # GET request
@@ -146,6 +151,10 @@ def login_view(request):
 
 
 def logout_view(request):
+    if request.user.is_authenticated:
+        activity_logger.info(
+            f"[LOGOUT] {request.user.username} ({request.user.role}) logged out at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
     logout(request)
     return redirect('login')
 
@@ -268,6 +277,7 @@ def update_patient(request, patient_id):
         patient.medical_condition = request.POST.get('medical_condition')
         patient.gender = request.POST.get('gender')
         patient.save()
+        activity_logger.info(f"[PATIENT UPDATED] '{patient.name}' (ID: {patient.patient_id}) was updated by {request.user.username} at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}")
         return render(request, 'update_success.html', {"patient": patient})
 
     return render(request, 'update_patient.html', {'patient': patient})
@@ -281,6 +291,7 @@ def update_success(request):
 def delete_patient(request, patient_id):
     patient = get_object_or_404(Patient, id=patient_id)
     patient.delete()
+    activity_logger.info(f"[PATIENT DELETED] '{patient.name}' (ID: {patient.patient_id}) was deleted by {request.user.username} at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}")
     return redirect('doctor_dashboard')
 
 
@@ -330,3 +341,12 @@ def download_private_key(request, username):
                 return response
         return JsonResponse({'error': 'Private key not found'}, status=404)
     return JsonResponse({'error': 'Only GET allowed'}, status=405)
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

@@ -1,0 +1,11 @@
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-24 09:03:22.846800+00:00 from IP 127.0.0.1
+[PATIENT UPDATED] Ahmad Rahman (ID: P1032) by Dr.Husna at 2025-06-24 09:03:36.199734+00:00
+[LOGIN SUCCESS] hazimharman () at 2025-06-24 09:03:50.079535+00:00 from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman () at 2025-06-24 09:04:25.209024+00:00 from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-24 17:15:09  from IP 127.0.0.1
+[PATIENT UPDATED] 'Ahmad Rahman' (ID: P1032) was updated by Dr.Husna at 2025-06-24 17:15:25
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-24 17:15:28
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-24 17:19:43  from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-24 17:24:24 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-24 17:24:31 from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-24 17:24:43  from IP 127.0.0.1

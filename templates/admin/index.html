@@ -1,10 +1,28 @@
 {% extends "admin/index.html" %}
 
 {% block content %}
-  <div style="margin-bottom:20px;">
-    <a href="{% url 'register' %}" class="button btn-primary" style="background:#3c8dbc;padding:10px;color:white;text-decoration:none;border-radius:5px;">
-      ➕ Register New User
-    </a>
-  </div>
-  {{ block.super }}
+<style>
+  .admin-link-btn {
+    background-color: #3c8dbc;
+    padding: 10px 16px;
+    color: white !important;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+    border: none;
+    width: fit-content;
+  }
+
+  .admin-link-btn:hover {
+    background-color: #367fa9;
+  }
+</style>
+
+<!-- Buttons -->
+<a href="{% url 'register' %}" class="admin-link-btn">➕ Register New User</a>
+<a href="{% url 'activity_log' %}" class="admin-link-btn">📄 View Activity Log</a><br>
+
+{{ block.super }}
 {% endblock %}
