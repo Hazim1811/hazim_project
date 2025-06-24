@@ -24,8 +24,10 @@
             <td>{{ patient.medical_condition }}</td>
             <td>{{ patient.gender }}</td>
             <td>
-                <a href="{% url 'update_patient' patient.id %}">Update</a>
-                <button onclick="openModal('{{ patient.id }}', '{{ patient.name }}')">Delete</button>
+                <a href="{% url 'update_patient' patient.patient_id %}">Update</a>
+                <button onclick="openModal('{{ patient.patient_id }}', '{{ patient.name }}')">
+                    Delete
+                </button>
             </td>
         </tr>
         {% endfor %}
@@ -33,33 +35,63 @@
 </table>
 
 <!-- Modal Structure -->
-<div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); align-items:center; justify-content:center;">
-    <div style="background:white; padding:30px; border-radius:10px; text-align:center; width:300px;">
-        <h3>Confirm Delete</h3>
-        <p id="patientNameText"></p>
-        <form id="deleteForm" method="POST">
+<div id="deleteModal" style="
+    display:none;
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.5);
+    align-items:center;
+    justify-content:center;
+  ">
+    <div style="
+      background:white;
+      padding:20px;
+      border-radius:6px;
+      max-width:400px;
+      width:90%;
+      text-align:center;
+    ">
+        <p id="patientNameText" style="margin-bottom:20px; font-weight:bold;"></p>
+        <form id="deleteForm" method="POST" style="display:inline-block; margin-right:10px;">
             {% csrf_token %}
-            <button type="submit" style="background:#0066ff; color:white; padding:10px 20px; border:none; border-radius:5px;">Delete</button>
-            <button type="button" onclick="closeModal()" style="margin-left:10px; padding:10px 20px; border:none; border-radius:5px;">Cancel</button>
+            <button type="submit" style="
+          background:#d9534f;
+          color:white;
+          padding:8px 16px;
+          border:none;
+          border-radius:4px;
+          cursor:pointer;
+        ">
+                Yes, Delete
+            </button>
         </form>
+        <button onclick="closeModal()" style="
+        background:#6c757d;
+        color:white;
+        padding:8px 16px;
+        border:none;
+        border-radius:4px;
+        cursor:pointer;
+      ">
+            Cancel
+        </button>
     </div>
 </div>
 
-<!-- Make sure script is inside block content -->
 <script>
     function openModal(patientId, patientName) {
-        const modal = document.getElementById('deleteModal');
+        // set the form action to include the business patient_id
         const form = document.getElementById('deleteForm');
-        const nameText = document.getElementById('patientNameText');
-
-        form.action = `/delete_patient/${patientId}/`;  // Dynamic form action
-        nameText.textContent = `Are you sure you want to delete "${patientName}"?`;
-        modal.style.display = 'flex';
+        form.action = `/delete_patient/${patientId}/`;
+        // set the confirmation message
+        document.getElementById('patientNameText').textContent =
+            `Are you sure you want to delete “${patientName}”?`;
+        // show the modal
+        document.getElementById('deleteModal').style.display = 'flex';
     }
 
     function closeModal() {
-        const modal = document.getElementById('deleteModal');
-        modal.style.display = 'none';
+        document.getElementById('deleteModal').style.display = 'none';
     }
 </script>
 {% endblock %}

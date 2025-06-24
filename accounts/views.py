@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from .forms import RegisterForm
 from .models import CustomUser, Patient
-from .supabase_utils import insert_public_key
+from .supabase_utils import insert_public_key, sync_patient, delete_patient_record
 from .decorators import role_required
 
 from Crypto.PublicKey import RSA
@@ -97,7 +97,6 @@ def password_change(request):
 
     else:
         form = PasswordChangeForm(request.user)
-
     return render(request, 'password_change.html', {'form': form})
 
 
@@ -226,6 +225,7 @@ def validate_qr(request):
                     session.save()
                     found = True
                     print(f"[DEBUG] Session matched and updated for {username}")
+                    print("[DEBUG] Received payload:", request.body)
                     break
 
             if not found:
@@ -267,17 +267,35 @@ def doctor_dashboard(request):
 
 @login_required
 def update_patient(request, patient_id):
-    patient = get_object_or_404(Patient, id=patient_id)
+    patient = get_object_or_404(Patient, patient_id=patient_id)
 
     if request.method == 'POST':
         patient.name = request.POST.get('name')
-        patient.patient_id = request.POST.get('patient_id')
         patient.email = request.POST.get('email')
         patient.phone_number = request.POST.get('phone_number')
         patient.medical_condition = request.POST.get('medical_condition')
         patient.gender = request.POST.get('gender')
         patient.save()
-        activity_logger.info(f"[PATIENT UPDATED] '{patient.name}' (ID: {patient.patient_id}) was updated by {request.user.username} at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}")
+
+        success, status_code, response_text = sync_patient({
+            "patient_id": patient.patient_id,
+            "name": patient.name,
+            "email": patient.email,
+            "phone_number": patient.phone_number,
+            "medical_condition": patient.medical_condition,
+            "gender": patient.gender
+        })
+
+        if not success:
+            activity_logger.warning(
+                f"[SUPABASE SYNC FAILED] Sync failed for patient '{patient.name}' ({patient.patient_id}) "
+                f"by {request.user.username} | Status: {status_code} | Response: {response_text}"
+            )
+
+        activity_logger.info(
+            f"[PATIENT UPDATED] '{patient.name}' (ID: {patient.patient_id}) was updated by {request.user.username} "
+            f"at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
         return render(request, 'update_success.html', {"patient": patient})
 
     return render(request, 'update_patient.html', {'patient': patient})
@@ -289,9 +307,22 @@ def update_success(request):
 
 @login_required
 def delete_patient(request, patient_id):
-    patient = get_object_or_404(Patient, id=patient_id)
+    patient = get_object_or_404(Patient, patient_id=patient_id)
+    patient_id_value = patient.patient_id
+    patient_name = patient.name
     patient.delete()
-    activity_logger.info(f"[PATIENT DELETED] '{patient.name}' (ID: {patient.patient_id}) was deleted by {request.user.username} at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    success, status_code, response_text = delete_patient_record(patient_id_value)
+    if not success:
+        activity_logger.warning(
+            f"[SUPABASE SYNC FAILED] Delete failed for patient '{patient_name}' ({patient_id_value}) "
+            f"by {request.user.username} | Status: {status_code} | Response: {response_text}"
+        )
+
+    activity_logger.info(
+        f"[PATIENT DELETED] '{patient_name}' (ID: {patient_id_value}) was deleted by {request.user.username} "
+        f"at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
+    )
     return redirect('doctor_dashboard')
 
 

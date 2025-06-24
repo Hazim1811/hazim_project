@@ -18,3 +18,48 @@
 [FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:51:53 from IP 127.0.0.1
 [FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:52:17 from IP 127.0.0.1
 [FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 18:53:43 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 21:08:06 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-24 21:08:12 from IP 127.0.0.1
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-24 21:12:37
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-24 21:15:43
+[LOGOUT] Ms.Jun (nurse) logged out at 2025-06-24 23:05:10
+[LOGOUT] Ms.Jun (nurse) logged out at 2025-06-24 23:05:43
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-24 23:27:32  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-24 23:28:15  from IP 127.0.0.1
+[PATIENT UPDATED] 'Ahmad Rahman' (ID: P1032) was updated by Dr.Husna at 2025-06-24 23:28:35
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-24 23:28:43
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-24 23:28:49  from IP 127.0.0.1
+[LOGOUT] Ms.Jun (nurse) logged out at 2025-06-24 23:45:04
+[PATIENT UPDATED] 'Ahmad Rahman' (ID: P1032) was updated by Dr.Husna at 2025-06-24 23:45:50
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-24 23:46:00
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-24 23:54:08  from IP 127.0.0.1
+[SUPABASE SYNC FAILED] Upsert failed for patient 'Ahmad Rahman' (P1032) by Dr.Husna | Status: 404 | Response: {}
+[PATIENT UPDATED] 'Ahmad Rahman' (ID: P1032) was updated by Dr.Husna at 2025-06-24 23:54:24
+[SUPABASE SYNC FAILED] Upsert failed for patient 'Ahmad Rahman' (P1032) by Dr.Husna | Status: 401 | Response: {"code":"42501","details":null,"hint":null,"message":"new row violates row-level security policy for table \"accounts_patient\""}
+[PATIENT UPDATED] 'Ahmad Rahman' (ID: P1032) was updated by Dr.Husna at 2025-06-24 23:56:36
+[PATIENT UPDATED] 'Ahmad Rahman' (ID: P1032) was updated by Dr.Husna at 2025-06-25 00:02:12
+[PATIENT DELETED] 'Ahmad Rahman' (ID: P1032) was deleted by Dr.Husna at 2025-06-25 00:03:04
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 00:04:00
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-25 00:51:56  from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Mr.Aiman' at 2025-06-25 00:54:23 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Mr.Aiman' at 2025-06-25 00:54:38 from IP 127.0.0.1
+[LOGIN SUCCESS] Mr.Aiman (nurse) at 2025-06-25 00:54:47  from IP 127.0.0.1
+[LOGOUT] Mr.Aiman (nurse) logged out at 2025-06-25 00:57:29
+[LOGOUT] Mr.Aiman (nurse) logged out at 2025-06-25 01:21:42
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 01:23:07
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 01:24:40
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 01:36:46
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 01:40:12
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 01:43:55
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 01:44:42
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 01:48:37
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 01:57:52
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 01:59:23
+[PATIENT DELETED] 'Daniel Lim' (ID: P1002) was deleted by Dr.Husna at 2025-06-25 02:00:23
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 02:02:20
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Husna at 2025-06-25 02:15:49
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 02:16:23
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-25 02:16:29  from IP 127.0.0.1
+[PATIENT UPDATED] 'Muzaffir' (ID: P3564) was updated by Dr.Husna at 2025-06-25 02:31:11
+[PATIENT DELETED] 'Muzaffir' (ID: P3564) was deleted by Dr.Husna at 2025-06-25 02:31:20
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-25 02:34:34
