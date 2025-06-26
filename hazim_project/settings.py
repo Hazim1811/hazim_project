@@ -166,6 +166,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Session Timeout
 # https://docs.djangoproject.com/en/5.1/topics/http/sessions/#session-expiry
 
-SESSION_COOKIE_AGE = 1800  # 30 minutes
+SESSION_COOKIE_AGE = 300  # 5 minutes
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
