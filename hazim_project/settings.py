@@ -162,7 +162,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-
 # Session Timeout
 # https://docs.djangoproject.com/en/5.1/topics/http/sessions/#session-expiry
 
