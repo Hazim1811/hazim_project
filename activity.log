@@ -95,3 +95,5 @@
 [FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:44:30 from IP 127.0.0.1
 [LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:44:48  from IP 127.0.0.1
 [LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:55:09  from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'admin' at 2025-06-29 17:22:33 from IP 192.168.56.1
+[LOGIN SUCCESS] admin (admin) at 2025-06-29 17:26:46  from IP 192.168.56.1
