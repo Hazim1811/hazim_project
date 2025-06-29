@@ -76,3 +76,22 @@
 [LOGIN SUCCESS] drjohn (doctor) at 2025-06-29 00:16:30  from IP 127.0.0.1
 [FAILED LOGIN] Attempt for 'drjohn' at 2025-06-29 00:18:11 from IP 127.0.0.1
 [LOGIN SUCCESS] drjohn (doctor) at 2025-06-29 00:18:13  from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:04:44 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:04:52 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Dr.Husna' at 2025-06-29 14:05:12 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:05:52 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:06:26 from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:16:53  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Rizal (doctor) at 2025-06-29 14:18:34  from IP 127.0.0.1
+[PATIENT UPDATED] 'Nurul Izzati Zulkifli' (ID: P1003) was updated by Dr.Rizal at 2025-06-29 14:19:11
+[PATIENT DELETED] 'Nurul Izzati Zulkifli' (ID: P1003) was deleted by Dr.Rizal at 2025-06-29 14:19:16
+[LOGOUT] Dr.Rizal (doctor) logged out at 2025-06-29 14:19:24
+[LOGIN SUCCESS] Ms.Aida (nurse) at 2025-06-29 14:20:37  from IP 127.0.0.1
+[LOGOUT] Ms.Aida (nurse) logged out at 2025-06-29 14:20:42
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:20:52  from IP 127.0.0.1
+[LOGOUT] Dr.Rizal (doctor) logged out at 2025-06-29 14:34:04
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:44:07 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:44:20 from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-06-29 14:44:30 from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:44:48  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:55:09  from IP 127.0.0.1

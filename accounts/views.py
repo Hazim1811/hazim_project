@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash, get_user_model
 from django.contrib.sessions.models import Session
-from django.http import HttpResponse, JsonResponse, Http404
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.base import ContentFile
@@ -15,7 +15,7 @@ from django.utils import timezone
 from .forms import RegisterForm
 from .models import CustomUser, Patient
 from .supabase_utils import insert_public_key, sync_patient, delete_patient_record
-from .decorators import role_required, api_key_required
+from .decorators import role_required
 
 from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
@@ -24,16 +24,6 @@ from Crypto.Hash import SHA256
 import base64, os, json, qrcode, secrets, io, logging
 
 activity_logger = logging.getLogger('activity')
-
-
-# Helper decorator to protect mobile/API endpoints with a shared key
-def api_key_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        api_key = request.headers.get('X-API-KEY')
-        if not api_key or api_key != settings.SUPABASE_API_KEY:
-            return JsonResponse({'error': 'Unauthorized'}, status=401)
-        return view_func(request, *args, **kwargs)
-    return wrapper
 
 
 def home_redirect(request):
@@ -57,6 +47,7 @@ def register(request):
             user.public_key = ""
             user.save()
 
+            activity_logger.info(f"[ADD USER] Admin {request.user.username} added user '{user.username}' ({user.role}) at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}")
             messages.success(request, "User registered successfully.")
             return redirect('register_success')
 
@@ -198,27 +189,54 @@ def qr_code(request):
 
 
 @csrf_exempt
-@api_key_required
 def validate_qr(request):
-    if request.method != 'POST':
-        return JsonResponse({'error': 'POST only'}, status=405)
-    try:
-        data = json.loads(request.body)
-        user = get_user_model().objects.get(username=data['username'])
-        # verify and set session …
-        public_key = RSA.import_key(user.public_key.encode())
-        h = SHA256.new(data['original_challenge'].encode())
-        pkcs1_15.new(public_key).verify(h, base64.b64decode(data['signed_challenge']))
-        # mark session …
-        for sess in Session.objects.filter(expire_date__gte=timezone.now()):
-            d = sess.get_decoded()
-            if d.get('qr_session_token') == data['session_token']:
-                d.update(qr_authenticated=True, qr_user_id=user.id, qr_user_role=user.role)
-                sess.session_data = Session.objects.encode(d); sess.save()
-                break
-        return JsonResponse({'success': True, 'message': 'Authenticated'})
-    except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            original_challenge = data.get('original_challenge')
+            signed_challenge = data.get('signed_challenge')
+            session_token = data.get('session_token')
+
+            user = get_user_model().objects.get(username=username)
+
+            if user.must_change_password:
+                return JsonResponse({'success': False, 'message': 'User must change password'})
+
+            if not user.public_key:
+                return JsonResponse({'success': False, 'message': 'Public key not found'})
+
+            # Verify signature
+            public_key = RSA.import_key(user.public_key.encode('utf-8'))
+            h = SHA256.new(original_challenge.encode('utf-8'))
+            signature = base64.b64decode(signed_challenge)
+            pkcs1_15.new(public_key).verify(h, signature)
+
+            # Find matching session and update it
+            now = timezone.now()
+            sessions = Session.objects.filter(expire_date__gte=now)
+
+            found = False
+            for session in sessions:
+                session_data = session.get_decoded()
+                if session_data.get('qr_session_token') == session_token:
+                    session_data['qr_authenticated'] = True
+                    session_data['qr_user_id'] = user.id
+                    session_data['qr_user_role'] = user.role
+                    session.session_data = Session.objects.encode(session_data)
+                    session.save()
+                    found = True
+                    print(f"[DEBUG] Session matched and updated for {username}")
+                    print("[DEBUG] Received payload:", request.body)
+                    break
+
+            if not found:
+                print("[DEBUG] Session token not found")
+
+            return JsonResponse({'success': True, 'message': 'Authentication successful'})
+        
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'Auth failed: {str(e)}'})
            
         
 @require_GET
@@ -256,6 +274,23 @@ def add_patient(request):
         email = request.POST.get('email')
         phone_number = request.POST.get('phone_number')
         medical_condition = request.POST.get('medical_condition')
+        gender = request.POST.get('gender')
+
+        patient = Patient.objects.create(
+            name=name,
+            email=email,
+            phone_number=phone_number,
+            medical_condition=medical_condition,
+            gender=gender
+        )
+
+        activity_logger.info(
+            f"[ADD PATIENT] Admin {request.user.username} added patient '{patient.name}' ({patient.patient_id}) at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
+
+        messages.success(request, "Patient added successfully.")
+        return redirect('/admin/')
+    return render(request, 'add_patient.html')
 
 
 @login_required
@@ -330,26 +365,43 @@ def nurse_dashboard(request):
 
 
 @csrf_exempt
-@api_key_required
 def mobile_login(request):
-    if request.method != 'POST':
-        return JsonResponse({'error': 'POST only'}, status=405)
-    data = json.loads(request.body)
-    user = authenticate(username=data.get('username'), password=data.get('password'))
-    return JsonResponse({'success': bool(user)}, status=(200 if user else 401))
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+
+            user = authenticate(username=username, password=password)
+
+            if user:
+                # Login success, do not start session, just confirm
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid credentials'}, status=401)
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    return JsonResponse({'error': 'Only POST allowed'}, status=405)
 
 
-@login_required
+@csrf_exempt
 def download_private_key(request, username):
-    if request.user.username != username:
-        raise Http404("Not authorized to download this key.")
-    key_path = os.path.join(settings.MEDIA_ROOT, 'keys', username, 'private.pem')
-    if os.path.exists(key_path):
-        with open(key_path, 'rb') as f:
-            resp = HttpResponse(f.read(), content_type='application/x-pem-file')
-            resp['Content-Disposition'] = f'attachment; filename={username}_private.pem'
-            return resp
-    return JsonResponse({'error': 'Not found'}, status=404)
+    if request.method == 'GET':
+        # Optional: Add token check here for extra security
+        print("[DEBUG] Download request for username:", username)
+
+        user_folder = os.path.join(settings.MEDIA_ROOT, 'keys', username, 'private.pem')
+        
+        print("[DEBUG] Full key path being checked:", user_folder)
+
+        if os.path.exists(user_folder):
+            with open(user_folder, 'rb') as f:
+                response = HttpResponse(f.read(), content_type='application/x-pem-file')
+                response['Content-Disposition'] = f'attachment; filename={username}_private.pem'
+                return response
+        return JsonResponse({'error': 'Private key not found'}, status=404)
+    return JsonResponse({'error': 'Only GET allowed'}, status=405)
 
 
 def get_client_ip(request):

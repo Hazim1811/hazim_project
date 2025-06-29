@@ -28,7 +28,6 @@ SECRET_KEY = 'django-insecure-0x=a583eli^wg%1=(f24+s9psmi_usuy3+426=^5r3*_1141&z
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '*', 'primary-balanced-roughy.ngrok-free.app']
-
 CSRF_TRUSTED_ORIGINS = ['https://primary-balanced-roughy.ngrok-free.app',]
 
 # Application definition
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'csp'
 ]
 
 MIDDLEWARE = [
@@ -51,11 +51,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware'
 ]
 
 ROOT_URLCONF = 'hazim_project.urls'
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/doctor/', '/nurse/'
 
 TEMPLATES = [
     {
@@ -73,7 +73,21 @@ TEMPLATES = [
     },
 ]
 
+# Application definition continued (CSP Middleware)
+
 WSGI_APPLICATION = 'hazim_project.wsgi.application'
+
+
+# --- Add this new block for django-csp ≥4.0 ---
+CONTENT_SECURITY_POLICY = {
+    'DIRECTIVES': {
+        'default-src': ("'self'",),
+        'script-src':  ("'self'", "'unsafe-inline'"),
+        'style-src':   ("'self'", "'unsafe-inline'"),
+        # add more directives here as needed, e.g.:
+        # 'img-src': ("'self'", 'data:', 'https://your.cdn.com'),
+    },
+}
 
 
 # Database
@@ -168,3 +182,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SESSION_COOKIE_AGE = 300  # 5 minutes
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+CSRF_COOKIE_HTTPONLY = True
+
+# Security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# Add strict transport settings (production only)
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
