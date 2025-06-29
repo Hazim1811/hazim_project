@@ -15,7 +15,7 @@ from django.utils import timezone
 from .forms import RegisterForm
 from .models import CustomUser, Patient
 from .supabase_utils import insert_public_key, sync_patient, delete_patient_record
-from .decorators import role_required
+from .decorators import role_required, api_key_required
 
 from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
