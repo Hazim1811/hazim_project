@@ -139,3 +139,12 @@
 [FAILED LOGIN] Attempt for 'hazimharman' at 2025-07-01 10:03:39 from IP 127.0.0.1
 [LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:03:48  from IP 127.0.0.1
 [LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:21:02  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Tajul (doctor) at 2025-07-01 10:23:19  from IP 127.0.0.1
+[LOGOUT] Dr.Tajul (doctor) logged out at 2025-07-01 10:23:43
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:24:42  from IP 127.0.0.1
+[LOGOUT] Dr.Tajul (doctor) logged out at 2025-07-01 10:27:58
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:30:12  from IP 127.0.0.1
+[LOGIN SUCCESS] Mr.Aiman (nurse) at 2025-07-01 10:31:36  from IP 127.0.0.1
+[PASSWORD CHANGE] Mr.Aiman successfully changed password at 2025-07-01 10:31:57
+[LOGOUT] Mr.Aiman (nurse) logged out at 2025-07-01 10:32:12
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:32:20  from IP 127.0.0.1

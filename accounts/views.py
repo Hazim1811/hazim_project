@@ -67,6 +67,8 @@ def password_change(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Keep the user logged in
 
+            activity_logger.info(f"[PASSWORD CHANGE] {user.username} successfully changed password "f"at {timezone.localtime():%Y-%m-%d %H:%M:%S}")
+
             # Generate RSA key pair
             key = RSA.generate(2048)
             private_key = key.export_key(pkcs=8)

@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from .models import CustomUser, Patient
 
 
-@admin.action(description="Reset selected users’ passwords to a random temporary value")
+@admin.action(description="Reset passwords user using random temporary passwords")
 def reset_to_temp(modeladmin, request, queryset):
     for user in queryset:
         temp_pw = get_random_string(10)
