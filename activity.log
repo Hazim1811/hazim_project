@@ -97,3 +97,45 @@
 [LOGIN SUCCESS] hazimharman (superuser) at 2025-06-29 14:55:09  from IP 127.0.0.1
 [FAILED LOGIN] Attempt for 'admin' at 2025-06-29 17:22:33 from IP 192.168.56.1
 [LOGIN SUCCESS] admin (admin) at 2025-06-29 17:26:46  from IP 192.168.56.1
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 12:26:10
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 12:26:19  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 12:53:19  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 12:57:08  from IP 127.0.0.1
+[ADD PATIENT] Admin hazimharman added patient 'Mahmud Abdullah' () at 2025-06-30 12:58:03
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:13:08  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:14:03  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:15:48  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:17:30  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:30:37  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 13:31:31  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:31:56  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 13:39:43  from IP 127.0.0.1
+[ADD PATIENT] Admin hazimharman added Mahmud Abdullah (P0034) at 2025-06-30 13:40:14
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 13:40:33  from IP 127.0.0.1
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:40:48  from IP 127.0.0.1
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 13:41:03
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 13:41:26
+[LOGIN SUCCESS] Dr.Husna (doctor) at 2025-06-30 13:44:42  from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Mr.Aida' at 2025-06-30 13:55:13 from IP 127.0.0.1
+[LOGIN SUCCESS] Ms.Aida (nurse) at 2025-06-30 13:55:32  from IP 127.0.0.1
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 14:13:19
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 14:15:04
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 14:25:40
+[LOGOUT] Dr.Husna (doctor) logged out at 2025-06-30 14:29:34
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 15:23:13  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 15:24:47  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 15:26:56  from IP 127.0.0.1
+[ADD USER] Admin hazimharman added user 'Dr.Tajul' (doctor) at 2025-06-30 15:29:21
+[LOGIN SUCCESS] Dr.Tajul (doctor) at 2025-06-30 15:31:22  from IP 127.0.0.1
+[PATIENT UPDATED] Ahmad Hafiz bin Roslan (P1004) by Dr.Tajul at 2025-06-30 15:34:23
+[PATIENT DELETED] Ahmad Hafiz bin Roslan (P1004) by Dr.Tajul at 2025-06-30 15:34:54
+[LOGOUT] Dr.Tajul (doctor) logged out at 2025-06-30 15:35:08
+[LOGIN SUCCESS] Ms.Aida (nurse) at 2025-06-30 15:35:33  from IP 127.0.0.1
+[FAILED LOGIN] Attempt for 'Ms.Aida' at 2025-06-30 15:36:42 from IP 127.0.0.1
+[LOGIN SUCCESS] Ms.Aida (nurse) at 2025-06-30 15:36:50  from IP 127.0.0.1
+[LOGOUT] Ms.Aida (nurse) logged out at 2025-06-30 15:37:25
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-06-30 15:40:14  from IP 127.0.0.1
+[ADD PATIENT] Admin hazimharman added Harman (P8560) at 2025-06-30 15:41:41
+[FAILED LOGIN] Attempt for 'hazimharman' at 2025-07-01 10:03:39 from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:03:48  from IP 127.0.0.1
+[LOGIN SUCCESS] hazimharman (superuser) at 2025-07-01 10:21:02  from IP 127.0.0.1

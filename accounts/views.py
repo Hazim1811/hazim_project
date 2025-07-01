@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.base import ContentFile
 from django.contrib.auth.forms import PasswordChangeForm
 from django.views.decorators.http import require_GET
-from django.contrib.admin.views.decorators import staff_member_required
 from django.utils import timezone
 
 from .forms import RegisterForm
@@ -267,29 +266,52 @@ def doctor_dashboard(request):
     return render(request, 'doctor_dashboard.html', {'patients': patients})
 
 
-@staff_member_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_patient(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone_number = request.POST.get('phone_number')
+        # 1) grab every field, including patient_id
+        name              = request.POST.get('name')
+        patient_id_val    = request.POST.get('patient_id')
+        email             = request.POST.get('email')
+        phone_number      = request.POST.get('phone_number')
         medical_condition = request.POST.get('medical_condition')
-        gender = request.POST.get('gender')
+        gender_raw        = request.POST.get('gender', '')
+        gender            = gender_raw.capitalize()
 
+        # 2) create your Patient
         patient = Patient.objects.create(
-            name=name,
-            email=email,
-            phone_number=phone_number,
-            medical_condition=medical_condition,
-            gender=gender
+            name=              name,
+            patient_id=        patient_id_val,
+            email=             email,
+            phone_number=      phone_number,
+            medical_condition= medical_condition,
+            gender=            gender,
         )
 
         activity_logger.info(
-            f"[ADD PATIENT] Admin {request.user.username} added patient '{patient.name}' ({patient.patient_id}) at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
+            f"[ADD PATIENT] Admin {request.user.username} added "
+            f"{patient.name} ({patient.patient_id}) at "
+            f"{timezone.localtime():%Y-%m-%d %H:%M:%S}"
         )
+
+        # 3) sync to Supabase
+        success, status, text = sync_patient({
+            "patient_id":        patient.patient_id,
+            "name":              patient.name,
+            "email":             patient.email,
+            "phone_number":      patient.phone_number,
+            "medical_condition": patient.medical_condition,
+            "gender":            patient.gender,
+        })
+        if not success:
+            messages.warning(request, f"⚠️ Supabase sync failed (status {status})")
+            activity_logger.warning(
+                f"[SUPABASE SYNC FAILED] Add '{patient.patient_id}' | {status} {text}"
+            )
 
         messages.success(request, "Patient added successfully.")
         return redirect('/admin/')
+
     return render(request, 'add_patient.html')
 
 
@@ -299,34 +321,38 @@ def update_patient(request, patient_id):
     patient = get_object_or_404(Patient, patient_id=patient_id)
 
     if request.method == 'POST':
-        patient.name = request.POST.get('name')
-        patient.email = request.POST.get('email')
-        patient.phone_number = request.POST.get('phone_number')
+        # grab and assign every field, including a new patient_id if they changed it
+        patient.name              = request.POST.get('name')
+        patient.patient_id        = request.POST.get('patient_id')
+        patient.email             = request.POST.get('email')
+        patient.phone_number      = request.POST.get('phone_number')
         patient.medical_condition = request.POST.get('medical_condition')
-        patient.gender = request.POST.get('gender')
+        patient.gender            = request.POST.get('gender', '').capitalize()
         patient.save()
 
-        success, status_code, response_text = sync_patient({
-            "patient_id": patient.patient_id,
-            "name": patient.name,
-            "email": patient.email,
-            "phone_number": patient.phone_number,
-            "medical_condition": patient.medical_condition,
-            "gender": patient.gender
-        })
+        activity_logger.info(
+            f"[PATIENT UPDATED] {patient.name} ({patient.patient_id}) by {request.user.username} "
+            f"at {timezone.localtime():%Y-%m-%d %H:%M:%S}"
+        )
 
+        # sync the updated data
+        success, status, text = sync_patient({
+            "patient_id":        patient.patient_id,
+            "name":              patient.name,
+            "email":             patient.email,
+            "phone_number":      patient.phone_number,
+            "medical_condition": patient.medical_condition,
+            "gender":            patient.gender,
+        })
         if not success:
+            messages.warning(request, f"⚠️ Supabase sync failed (status {status})")
             activity_logger.warning(
-                f"[SUPABASE SYNC FAILED] Sync failed for patient '{patient.name}' ({patient.patient_id}) "
-                f"by {request.user.username} | Status: {status_code} | Response: {response_text}"
+                f"[SUPABASE SYNC FAILED] Update '{patient.patient_id}' | {status} {text}"
             )
 
-        activity_logger.info(
-            f"[PATIENT UPDATED] '{patient.name}' (ID: {patient.patient_id}) was updated by {request.user.username} "
-            f"at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
-        )
         return render(request, 'update_success.html', {"patient": patient})
 
+    # on GET, render the template with the existing patient to prefill your inputs
     return render(request, 'update_patient.html', {'patient': patient})
 
 
@@ -338,20 +364,20 @@ def update_success(request):
 @role_required('doctor')
 def delete_patient(request, patient_id):
     patient = get_object_or_404(Patient, patient_id=patient_id)
-    patient_id_value = patient.patient_id
-    patient_name = patient.name
+    pid = patient.patient_id
+    name = patient.name
     patient.delete()
 
-    success, status_code, response_text = delete_patient_record(patient_id_value)
+    success, status, text = delete_patient_record(pid)
     if not success:
         activity_logger.warning(
-            f"[SUPABASE SYNC FAILED] Delete failed for patient '{patient_name}' ({patient_id_value}) "
-            f"by {request.user.username} | Status: {status_code} | Response: {response_text}"
+            f"[SUPABASE SYNC FAILED] Delete '{pid}' by {request.user.username} | "
+            f"{status} {text}"
         )
 
     activity_logger.info(
-        f"[PATIENT DELETED] '{patient_name}' (ID: {patient_id_value}) was deleted by {request.user.username} "
-        f"at {timezone.localtime().strftime('%Y-%m-%d %H:%M:%S')}"
+        f"[PATIENT DELETED] {name} ({pid}) by {request.user.username} "
+        f"at {timezone.localtime():%Y-%m-%d %H:%M:%S}"
     )
     return redirect('doctor_dashboard')
 

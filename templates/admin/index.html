@@ -22,7 +22,7 @@
 
 <!-- Buttons -->
 <a href="{% url 'register' %}" class="admin-link-btn">➕ Register New User</a>
-<a href="{% url 'activity_log' %}" class="admin-link-btn">📄 View Activity Log</a><br>
-
+<a href="{% url 'activity_log' %}" class="admin-link-btn">📄 View Activity Log</a>
+<a href="{% url 'add_patient' %}" class="admin-link-btn">➕ Register Patient</a><br>
 {{ block.super }}
 {% endblock %}

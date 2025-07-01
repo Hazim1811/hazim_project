@@ -20,4 +20,5 @@ urlpatterns = [
     path('mobile_login/', views.mobile_login, name='mobile_login'),
     path('private_key/<str:username>/', views.download_private_key, name='download_private_key'),
     path('logout/', views.logout_view, name='logout'),
+    path('add_patient/', views.add_patient, name='add_patient'),
 ]
